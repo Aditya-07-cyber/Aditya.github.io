@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADITYA | Operations & Management - B.Tech CSE (AI)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #0a0908;
+            --bg-card: rgba(24, 24, 27, 0.7);
+            --bg-card-hover: rgba(39, 39, 42, 0.9);
+            --accent-primary: #fb923c;
+            --accent-secondary: #fcd34d;
+            --accent-emerald: #10b981;
+            --text-main: #f3f4f6;
+            --text-muted: #a1a1aa;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glow-spread: rgba(251, 146, 60, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .ambient-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+
+        .blob {
+            position: absolute; border-radius: 50%; filter: blur(120px);
+            opacity: 0.3; animation: float 20s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            top: -10%; left: -10%; width: 500px; height: 500px;
+            background: var(--accent-primary); animation-delay: 0s;
+        }
+
+        .blob-2 {
+            bottom: -20%; right: -10%; width: 600px; height: 600px;
+            background: #dc2626; animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, 50px) scale(1.2); }
+        }
+
+        code, .tech-tag, .stat-badge, .role-date { font-family: 'Fira Code', monospace; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+        header {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(10, 9, 8, 0.7);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            z-index: 1000; border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        nav { display: flex; justify-content: space-between; align-items: center; height: 70px; }
+
+        .logo { font-weight: 800; font-size: 1.25rem; color: var(--text-main); letter-spacing: -0.5px; }
+        .logo span { color: var(--accent-primary); }
+
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; position: relative; transition: color 0.3s ease;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -4px; left: 0; background-color: var(--accent-primary); transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--text-main); }
+        .nav-links a:hover::after { width: 100%; }
+
+        section { padding: 6rem 0 3rem 0; }
+
+        .section-title {
+            font-size: 1.8rem; font-weight: 700; margin-bottom: 2.5rem;
+            display: flex; align-items: center; gap: 0.75rem;
+        }
+        .section-title::after {
+            content: ''; flex: 1; height: 1px; background: var(--border-color); margin-left: 1rem;
+        }
+        .section-title i { color: var(--accent-primary); font-size: 1.5rem; }
+
+        #hero {
+            padding-top: 12rem; padding-bottom: 4rem; min-height: 90vh;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(251, 146, 60, 0.1); color: var(--accent-primary);
+            padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+            margin-bottom: 1.5rem; border: 1px solid rgba(251, 146, 60, 0.2);
+            animation: slideDown 0.8s ease-out forwards; opacity: 0; transform: translateY(-20px);
+        }
+
+        .hero-title {
+            font-size: 4.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem;
+            background: linear-gradient(to right, #ffffff, #fb923c, #fcd34d, #ffffff);
+            background-size: 300% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: textGradient 6s linear infinite, slideUp 0.8s ease-out 0.2s forwards;
+            opacity: 0; transform: translateY(30px);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem; color: var(--text-muted); max-width: 750px;
+            margin-bottom: 2.5rem; font-weight: 300; line-height: 1.8;
+            animation: slideUp 0.8s ease-out 0.4s forwards; opacity: 0; transform: translateY(30px);
+        }
+
+        .cta-group {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.6s forwards; opacity: 0; transform: translateY(30px);
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.8rem;
+            border-radius: 8px; font-weight: 600; font-size: 0.95rem; text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary); color: #000;
+            box-shadow: 0 4px 15px rgba(251, 146, 60, 0.3);
+        }
+        .btn-primary:hover {
+            background: #fdba74; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(251, 146, 60, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03); color: var(--text-main);
+            border: 1px solid var(--border-color); backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08); border-color: var(--accent-primary);
+            transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-card {
+            background: var(--bg-card); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; transition: all 0.4s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px); border-color: rgba(251, 146, 60, 0.4); box-shadow: 0 10px 30px var(--glow-spread);
+        }
+
+        .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        .about-text p { color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1.05rem; }
+        .info-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; }
+        .info-item h4 { font-size: 0.8rem; text-transform: uppercase; color: var(--accent-secondary); letter-spacing: 1.5px; margin-bottom: 0.3rem; }
+        .info-item p { font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
+
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+        .skill-category h3 { font-size: 1rem; color: var(--text-main); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.6rem; }
+        .skill-category h3 i { color: var(--accent-primary); }
+        .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .tech-tag {
+            background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color);
+            color: var(--text-muted); padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.8rem; transition: all 0.3s ease;
+        }
+        .tech-tag:hover {
+            color: var(--accent-primary); border-color: var(--accent-primary);
+            background: rgba(251, 146, 60, 0.05); transform: translateY(-2px);
+        }
+
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 2rem; }
+        @media (max-width: 768px) {
+            .projects-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 3rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+
+        .project-card { display: flex; flex-direction: column; justify-content: space-between; height: 100%; }
+        .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .project-title { font-size: 1.4rem; font-weight: 700; color: var(--text-main); transition: color 0.3s ease; }
+        .project-card:hover .project-title { color: var(--accent-primary); }
+        .project-tagline { font-size: 0.9rem; color: var(--accent-secondary); margin-bottom: 1rem; font-weight: 500; }
+        
+        .badge-flagship {
+            background: rgba(251, 146, 60, 0.15); color: var(--accent-primary);
+            border: 1px solid rgba(251, 146, 60, 0.3); padding: 0.3rem 0.7rem;
+            border-radius: 6px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;
+        }
+
+        .project-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .project-highlights { list-style: none; margin-bottom: 1.5rem; }
+        .project-highlights li { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.6rem; position: relative; padding-left: 1.5rem; }
+        .project-highlights li::before { content: '▹'; position: absolute; left: 0; color: var(--accent-primary); font-size: 1.2rem; line-height: 1; }
+        .project-footer { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border-color); }
+
+        .role-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+        .role-title { font-size: 1.3rem; font-weight: 700; }
+        .role-org { color: var(--accent-primary); font-weight: 600; font-size: 1rem; }
+        .role-date { font-size: 0.85rem; color: var(--text-main); background: rgba(255, 255, 255, 0.08); padding: 0.3rem 0.8rem; border-radius: 6px; }
+
+        footer { border-top: 1px solid var(--border-color); padding: 3rem 0; margin-top: 4rem; text-align: center; background: rgba(10, 9, 8, 0.8); }
+        .social-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; }
+        .social-icon { color: var(--text-muted); font-size: 1.8rem; transition: all 0.3s ease; }
+        .social-icon:hover { color: var(--accent-primary); transform: translateY(-5px) scale(1.1); text-shadow: 0 0 15px var(--accent-primary); }
+        .copyright { color: var(--text-muted); font-size: 0.9rem; }
+
+        @keyframes textGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <header id="navbar">
+        <div class="container">
+            <nav>
+                <div class="logo">&lt;ADITYA <span>/</span>&gt;</div>
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Hero Section -->
+        <section id="hero">
+            <div class="hero-badge">
+                <i class="fa-solid fa-users-gear"></i> Tech Operations & Event Logistics
+            </div>
+            
+            <h1 class="hero-title">ADITYA</h1>
+            
+            <p class="hero-subtitle">
+                First-year B.Tech CSE (AI) undergraduate and NCC Cadet. Bridging the gap between technical development and operational execution through disciplined logistics, project coordination, and technical pitch strategy.
+            </p>
+            <div class="cta-group">
+                <a href="#experience" class="btn btn-primary"><i class="fa-solid fa-briefcase"></i> View Experience</a>
+                <a href="https://www.linkedin.com/in/aditya-rohilla-0875a4432" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="reveal">
+            <h2 class="section-title"><i class="fa-regular fa-user"></i> The Operations Pitch</h2>
+            <div class="about-grid">
+                <div class="glass-card about-text">
+                    <p>
+                        I am a first-year Computer Science and AI student with a unique focus on <strong>Technical Operations, Project Management, and Team Logistics</strong>. While my peers focus entirely on code, I specialize in making sure the team actually delivers, communicates, and functions under pressure.
+                    </p>
+                    <p>
+                        My background in the <strong>National Cadet Corps (NCC)</strong> has instilled a high degree of discipline, chain-of-command understanding, and crowd control capabilities. I apply these non-technical skills directly to tech environments—whether it's managing submission timelines during 24-hour hackathons at IIIT Delhi, or translating complex technical architecture into a winning presentation for faculty juries at the Smart India Hackathon (SIH).
+                    </p>
+                    <p>
+                        I have a foundational understanding of C programming, which gives me the "tech literacy" required to understand developer needs, troubleshoot on-ground blockers, and seamlessly run operations for college tech clubs and technical fests.
+                    </p>
+                </div>
+                <div class="glass-card">
+                    <ul class="info-list">
+                        <li class="info-item">
+                            <h4>Target Role</h4>
+                            <p>Club Operations & Logistics Team</p>
+                        </li>
+                        <li class="info-item">
+                            <h4>Degree</h4>
+                            <p>B.Tech CSE (Artificial Intelligence)</p>
+                        </li>
+                        <li class="info-item">
+                            <h4>Current Standing</h4>
+                            <p>1st Year</p>
+                        </li>
+                        <li class="info-item">
+                            <h4>Core Competency</h4>
+                            <p>Project Mgmt, Pitching, Crisis Triage</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operations & Skills Matrix -->
+        <section id="skills" class="reveal">
+            <h2 class="section-title"><i class="fa-solid fa-layer-group"></i> Operations & Skills Matrix</h2>
+            <div class="skills-grid">
+                
+                <div class="glass-card skill-category">
+                    <h3><i class="fa-solid fa-people-group"></i> Management & Ops</h3>
+                    <div class="tag-cloud">
+                        <span class="tech-tag">Event Logistics</span>
+                        <span class="tech-tag">Crowd Control</span>
+                        <span class="tech-tag">Crisis Triage</span>
+                        <span class="tech-tag">Timeline Management</span>
+                    </div>
+                </div>
+
+                <div class="glass-card skill-category">
+                    <h3><i class="fa-solid fa-bullhorn"></i> Communication</h3>
+                    <div class="tag-cloud">
+                        <span class="tech-tag">Technical Pitching</span>
+                        <span class="tech-tag">Jury Presentations</span>
+                        <span class="tech-tag">Pitch Deck Creation</span>
+                        <span class="tech-tag">Inter-team Liaison</span>
+                    </div>
+                </div>
+
+                <div class="glass-card skill-category">
+                    <h3><i class="fa-solid fa-person-military-pointing"></i> Leadership (NCC)</h3>
+                    <div class="tag-cloud">
+                        <span class="tech-tag">Drill Coordination</span>
+                        <span class="tech-tag">Discipline Enforcement</span>
+                        <span class="tech-tag">Hierarchy Navigation</span>
+                    </div>
+                </div>
+
+                <div class="glass-card skill-category">
+                    <h3><i class="fa-solid fa-microchip"></i> Foundational Tech</h3>
+                    <div class="tag-cloud">
+                        <span class="tech-tag">C Programming</span>
+                        <span class="tech-tag">Systems Logic</span>
+                        <span class="tech-tag">Tech Literacy for Ops</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Experience & Projects -->
+        <section id="experience">
+            <h2 class="section-title reveal"><i class="fa-solid fa-clipboard-check"></i> Field Experience & Projects</h2>
+            <div class="projects-grid">
+
+                <!-- NCC Experience -->
+                <div class="glass-card project-card reveal">
+                    <div>
+                        <div class="project-header">
+                            <div class="project-title">National Cadet Corps (NCC)</div>
+                            <span class="badge-flagship">Core Discipline</span>
+                        </div>
+                        <div class="project-tagline">Cadet • Institutional Training & Leadership</div>
+                        <p class="project-desc">
+                            Served in the NCC, undergoing rigorous physical and mental training focused on leadership, secular outlook, and ideals of selfless service.
+                        </p>
+                        <ul class="project-highlights">
+                            <li><strong>Logistics & Drill Coordination:</strong> Executed large-scale parade drills requiring exact timing and team synchronization.</li>
+                            <li><strong>Hierarchy Management:</strong> Learned to operate efficiently within a strict chain of command, ensuring rapid execution of orders.</li>
+                            <li><strong>Pressure Conditioning:</strong> Developed the ability to maintain composure and organizational structure during high-fatigue situations.</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div class="tag-cloud">
+                            <span class="tech-tag">Discipline</span>
+                            <span class="tech-tag">Crowd Control</span>
+                            <span class="tech-tag">Leadership</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIH Project -->
+                <div class="glass-card project-card reveal">
+                    <div>
+                        <div class="project-header">
+                            <div class="project-title">SafeTrail (SIH Selection)</div>
+                            <span class="badge-flagship">Top 50 / 150+ Teams</span>
+                        </div>
+                        <div class="project-tagline">Pitch Strategist & Project Coordinator</div>
+                        <p class="project-desc">
+                            Core coordination team member for an offline geo-fencing and incident response platform built for the internal Smart India Hackathon.
+                        </p>
+                        <ul class="project-highlights">
+                            <li><strong>Technical Translation:</strong> Handled the project presentation, translating complex mesh-networking architecture into an easily digestible, compelling pitch for faculty juries.</li>
+                            <li><strong>Project Management:</strong> Coordinated "basic stuff"—managing submission portals, ensuring documentation deadlines were met, and keeping the dev team unblocked.</li>
+                            <li><strong>Team Logistics:</strong> Ensured seamless transitions between presentation phases and Q&A sessions during evaluation.</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div class="tag-cloud">
+                            <span class="tech-tag">Pitch Strategy</span>
+                            <span class="tech-tag">Coordination</span>
+                            <span class="tech-tag">Documentation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IIIT Delhi Hackathon -->
+                <div class="glass-card project-card reveal">
+                    <div>
+                        <div class="project-header">
+                            <div class="project-title">IIIT Delhi Hackathon</div>
+                        </div>
+                        <div class="project-tagline">Participant & Logistics Support</div>
+                        <p class="project-desc">
+                            Competed in a high-pressure, time-constrained hackathon environment at Indraprastha Institute of Information Technology.
+                        </p>
+                        <ul class="project-highlights">
+                            <li><strong>Crisis Navigation:</strong> Supported team operations during critical overnight development phases.</li>
+                            <li><strong>Networking & Recon:</strong> Interacted with rival teams and mentors to gather intelligence on judging criteria and pivot project focus accordingly.</li>
+                            <li><strong>Time Allocation:</strong> Helped enforce strict timeboxing for feature development vs. presentation preparation.</li>
+                        </ul>
+                    </div>
+                    <div class="project-footer">
+                        <div class="tag-cloud">
+                            <span class="tech-tag">Hackathon Ops</span>
+                            <span class="tech-tag">Timeboxing</span>
+                            <span class="tech-tag">Adaptability</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="reveal">
+            <h2 class="section-title"><i class="fa-solid fa-paper-plane"></i> Get In Touch</h2>
+            <div class="glass-card" style="text-align: center; padding: 4rem 2rem;">
+                <h3 style="font-size: 2rem; margin-bottom: 1rem; color: var(--text-main);">Need an Operations Lead?</h3>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem auto; font-size: 1.1rem;">
+                    Looking to contribute my logistics, presentation, and management skills to a dynamic college club operations team.
+                </p>
+                <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+                    <a href="mailto:aditya.aadi1707@gmail.com" class="btn btn-primary"><i class="fa-solid fa-envelope"></i> Send Email</a>
+                    <a href="https://www.linkedin.com/in/aditya-rohilla-0875a4432" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                    <a href="https://github.com" target="_blank" class="btn btn-secondary"><i class="fa-brands fa-github"></i> GitHub</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/aditya-rohilla-0875a4432" class="social-icon" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="mailto:aditya.aadi1707@gmail.com" class="social-icon"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+            <p class="copyright">
+                Designed & Built for ADITYA • B.Tech CSE (AI) Operations & Logistics
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const header = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.style.background = 'rgba(10, 9, 8, 0.85)';
+                    header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+                } else {
+                    header.style.background = 'rgba(10, 9, 8, 0.7)';
+                    header.style.boxShadow = 'none';
+                }
+            });
+
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); 
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => revealOnScroll.observe(el));
+        });
+    </script>
+
+</body>
+</html>
